@@ -248,133 +248,31 @@ def generate_email(
 
 # ── Gradio UI ─────────────────────────────────────────────────────────────────
 def build_ui():
-    with gr.Blocks(css=CSS, title="AI Job Email Generator") as demo:
+    with gr.Blocks(title="AI Job Email Generator", css=CSS) as demo:   # ← Add css=CSS here
 
         gr.HTML(HEADER_HTML)
 
         with gr.Row():
-            # ── Left column: inputs ─────────────────────────────────────────
-            with gr.Column(scale=1, elem_classes="panel"):
-                gr.Markdown("### 👤 Your profile")
-                your_name = gr.Textbox(
-                    label="Your full name",
-                    placeholder="e.g. Priya Sharma",
-                )
-                your_skills = gr.Textbox(
-                    label="Skills & experience",
-                    placeholder=(
-                        "e.g. 3 years Python, PyTorch, LLM fine-tuning, RAG pipelines, "
-                        "deployed 2 production ML models, B.Tech CS from BITS Pilani..."
-                    ),
-                    lines=5,
-                )
-
-                gr.Markdown("### 🎯 Target job")
-                target_company = gr.Textbox(
-                    label="Company",
-                    placeholder="e.g. Google DeepMind",
-                )
-                target_role = gr.Textbox(
-                    label="Role / position",
-                    placeholder="e.g. ML Engineer",
-                )
-                tone = gr.Dropdown(
-                    label="Email tone",
-                    choices=[
-                        "Professional and confident",
-                        "Enthusiastic and warm",
-                        "Concise and direct",
-                        "Formal and respectful",
-                    ],
-                    value="Professional and confident",
-                )
-
-                gr.Markdown("### 📧 Send options")
-                recipient_email = gr.Textbox(
-                    label="Recipient email (optional)",
-                    placeholder="recruiter@company.com",
-                )
-                send_email = gr.Checkbox(
-                    label="Send email via SendGrid",
-                    value=False,
-                )
-
-                gr.Markdown("### 🔑 API keys")
-                gr.Markdown(
-                    "<small style='color:#6b7280'>Set these as Secrets in HF Spaces, "
-                    "or enter below for local testing.</small>"
-                )
-                openai_key_input = gr.Textbox(
-                    label="OpenAI API key",
-                    placeholder="sk-...",
-                    type="password",
-                )
-                sendgrid_key_input = gr.Textbox(
-                    label="SendGrid API key",
-                    placeholder="SG...",
-                    type="password",
-                )
-                sender_email_input = gr.Textbox(
-                    label="Your verified sender email",
-                    placeholder="you@yourdomain.com",
-                )
-
-                generate_btn = gr.Button(
-                    "✦ Generate Email",
-                    variant="primary",
-                    size="lg",
-                )
-
-            # ── Right column: outputs ───────────────────────────────────────
-            with gr.Column(scale=1, elem_classes="panel"):
-                gr.Markdown("### 🤖 Agent pipeline log")
-                status_output = gr.Textbox(
-                    label="",
-                    lines=8,
-                    interactive=False,
-                    elem_classes="status-box",
-                    placeholder="Agent logs will appear here...",
-                )
-
-                gr.Markdown("### ✉️ Generated email")
-                email_output = gr.Textbox(
-                    label="",
-                    lines=18,
-                    interactive=True,
-                    elem_classes="email-output",
-                    placeholder="Your crafted email will appear here...",
-                    show_copy_button=True,
-                )
+            # ... (your entire UI code stays exactly the same)
 
         generate_btn.click(
             fn=generate_email,
-            inputs=[
-                your_name,
-                your_skills,
-                target_company,
-                target_role,
-                recipient_email,
-                tone,
-                send_email,
-                openai_key_input,
-                sendgrid_key_input,
-                sender_email_input,
-            ],
+            inputs=[...],   # your inputs
             outputs=[status_output, email_output],
         )
 
         gr.HTML(FOOTER_HTML)
-      
 
     return demo
 
 
 if __name__ == "__main__":
-  app = build_ui()
-  app.launch(
-        server_name="0.0.0.0",      # Important for Render
-        server_port=int(os.environ.get("PORT", 7860)),  # Use Render's PORT
-        share=False,                # Disable share on production
-        css=CSS,
-        show_error=True)
+    app = build_ui()
+    app.launch(
+        server_name="0.0.0.0",
+        server_port=int(os.environ.get("PORT", 7860)),
+        share=False
+        # Do NOT put css= here
+    )
+
     
