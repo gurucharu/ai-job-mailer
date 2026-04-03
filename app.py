@@ -364,10 +364,17 @@ def build_ui():
         )
 
         gr.HTML(FOOTER_HTML)
+      
 
     return demo
 
 
 if __name__ == "__main__":
-    app = build_ui()
-    app.launch(share=True)
+  app = build_ui()
+    app.launch(
+        server_name="0.0.0.0",      # Important for Render
+        server_port=int(os.environ.get("PORT", 7860)),  # Use Render's PORT
+        share=False,                # Disable share on production
+        css=CSS,
+        show_error=True)
+    
